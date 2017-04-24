@@ -1,44 +1,40 @@
-const pkg = require('../package.json');
-const messages = require('./messages.json');
+const pkg = require("../package.json");
+const messages = require("./messages.json");
 // ports.
-const DEV_SERVER_PORT   = 3000;
-const APP_SERVER_PORT   = 7101;
+const DEV_SERVER_PORT = 3000;
+const APP_SERVER_PORT = 7101;
 
 const cspSelf = `'self'`;
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 
 const contentSecurityPolicy = {
   defaultSrc: [cspSelf],
 
   scriptSrc: [cspSelf]
-    .concat(!isProduction && `http://localhost:${DEV_SERVER_PORT}`)
-    .concat(!isProduction && '\'unsafe-eval\'')
+    .concat(!isProduction && `http://localhost:*`)
+    .concat(!isProduction && "'unsafe-eval'")
     .filter(Boolean),
 
   connectSrc: [cspSelf]
-    .concat(!isProduction && `http://localhost:${DEV_SERVER_PORT}`)
-    .concat(!isProduction && `ws://localhost:${DEV_SERVER_PORT}`)
+    .concat(!isProduction && `http://localhost:*`)
+    .concat(!isProduction && `ws://localhost:*`)
     .filter(Boolean),
 
-  styleSrc: [cspSelf, 'https://fonts.googleapis.com']
-    .concat(!isProduction && 'blob:')
-    .concat(!isProduction && `http://localhost:${DEV_SERVER_PORT}`)
+  styleSrc: [cspSelf, "https://fonts.googleapis.com"]
+    .concat(!isProduction && "blob:")
+    .concat(!isProduction && `http://localhost:*`)
     .filter(Boolean),
 
-  fontSrc: [cspSelf, 'https://fonts.gstatic.com/']
-    .concat(!isProduction && `http://localhost:${DEV_SERVER_PORT}`)
+  fontSrc: [cspSelf, "https://fonts.gstatic.com/"]
+    .concat(!isProduction && `http://localhost:*`)
     .filter(Boolean),
 
   mediaSrc: [cspSelf],
 
-  imgSrc: [
-    cspSelf,
-    '*.amazonaws.com'
-  ]
-  .concat(!isProduction && `http://localhost:${DEV_SERVER_PORT}`)
-  .filter(Boolean)
+  imgSrc: [cspSelf, "*.amazonaws.com"]
+    .concat(!isProduction && `http://localhost:*`)
+    .filter(Boolean)
 };
-
 
 const server = {
   name: pkg.name,
@@ -57,4 +53,4 @@ module.exports = {
   server,
   devServer,
   messages
-}
+};

@@ -1,11 +1,11 @@
-var path = require('path');
-var webpack = require('webpack');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-var WatchMissingNodeModulesPlugin = require('../scripts/utils/WatchMissingNodeModulesPlugin');
-var paths = require('./paths');
-var env = require('./env');
-var writeStats = require('./utils/write-stats');
-var notifyStats = require('./utils/notify-stats');
+var path = require("path");
+var webpack = require("webpack");
+var CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+var WatchMissingNodeModulesPlugin = require("../scripts/utils/WatchMissingNodeModulesPlugin");
+var paths = require("./paths");
+var env = require("./env");
+var writeStats = require("./utils/write-stats");
+var notifyStats = require("./utils/notify-stats");
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -15,36 +15,36 @@ var clientConfig = {
   // We don't use source maps here because they can be confusing:
   // https://github.com/facebookincubator/create-react-app/issues/343#issuecomment-237241875
   // You may want 'cheap-module-source-map' instead if you prefer source maps.
-  devtool: 'eval',
+  devtool: "eval",
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
   entry: {
     main: [
-        // Include WebpackDevServer client. It connects to WebpackDevServer via
-        // sockets and waits for recompile notifications. When WebpackDevServer
-        // recompiles, it sends a message to the client by socket. If only CSS
-        // was changed, the app reload just the CSS. Otherwise, it will refresh.
-        // The "?/" bit at the end tells the client to look for the socket at
-        // the root path, i.e. /sockjs-node/. Otherwise visiting a client-side
-        // route like /todos/42 would make it wrongly request /todos/42/sockjs-node.
-        // The socket server is a part of WebpackDevServer which we are using.
-        // The /sockjs-node/ path I'm referring to is hardcoded in WebpackDevServer.
-        require.resolve('webpack-dev-server/client') + '?http://localhost:3000/',
-        // Include Webpack hot module replacement runtime. Webpack is pretty
-        // low-level so we need to put all the pieces together. The runtime listens
-        // to the events received by the client above, and applies updates (such as
-        // new CSS) to the running application.
-        require.resolve('webpack/hot/dev-server'),
-        // We ship a few polyfills by default.
-        require.resolve('./polyfills'),
-        // Finally, this is your app's code:
-        paths.appIndexJs
-        // We include the app code last so that if there is a runtime error during
-        // initialization, it doesn't blow up the WebpackDevServer client, and
-        // changing JS code would still trigger a refresh.
-      ],
-    vendor: ['react','react-dom']
+      // Include WebpackDevServer client. It connects to WebpackDevServer via
+      // sockets and waits for recompile notifications. When WebpackDevServer
+      // recompiles, it sends a message to the client by socket. If only CSS
+      // was changed, the app reload just the CSS. Otherwise, it will refresh.
+      // The "?/" bit at the end tells the client to look for the socket at
+      // the root path, i.e. /sockjs-node/. Otherwise visiting a client-side
+      // route like /todos/42 would make it wrongly request /todos/42/sockjs-node.
+      // The socket server is a part of WebpackDevServer which we are using.
+      // The /sockjs-node/ path I'm referring to is hardcoded in WebpackDevServer.
+      require.resolve("webpack-dev-server/client") + "?/",
+      // Include Webpack hot module replacement runtime. Webpack is pretty
+      // low-level so we need to put all the pieces together. The runtime listens
+      // to the events received by the client above, and applies updates (such as
+      // new CSS) to the running application.
+      require.resolve("webpack/hot/dev-server"),
+      // We ship a few polyfills by default.
+      require.resolve("./polyfills"),
+      // Finally, this is your app's code:
+      paths.appIndexJs
+      // We include the app code last so that if there is a runtime error during
+      // initialization, it doesn't blow up the WebpackDevServer client, and
+      // changing JS code would still trigger a refresh.
+    ],
+    vendor: ["react", "react-dom"]
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
@@ -54,7 +54,7 @@ var clientConfig = {
     filename: "[name].js",
     chunkFilename: "[name].js",
     // In development, we always serve from the root. This makes config easier.
-    publicPath: 'http://localhost:3000/'
+    publicPath: "/"
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -67,11 +67,11 @@ var clientConfig = {
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
     // https://github.com/facebookincubator/create-react-app/issues/290
-    extensions: ['.js', '.json', '.jsx', ''],
+    extensions: [".js", ".json", ".jsx", ""],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web'
+      "react-native": "react-native-web"
     }
   },
   module: {
@@ -80,8 +80,8 @@ var clientConfig = {
     preLoaders: [
       {
         test: /\.(js|jsx)$/,
-        loader: 'eslint',
-        include: paths.appSrc,
+        loader: "eslint",
+        include: paths.appSrc
       }
     ],
     loaders: [
@@ -89,21 +89,21 @@ var clientConfig = {
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
-        loader: 'babel',
-        query: require('./babel.dev')
+        loader: "babel",
+        query: require("./babel.dev")
       },
       {
         test: /\.css$/,
         loaders: [
-          'style-loader',
-          'css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss?sourceMap&sourceComments',
-        ],
+          "style-loader",
+          "css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss?sourceMap&sourceComments"
+        ]
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
       {
         test: /\.json$/,
-        loader: 'json'
+        loader: "json"
       },
       // "file" loader makes sure those assets get served by WebpackDevServer.
       // When you `import` an asset, you get its (virtual) filename.
@@ -111,51 +111,48 @@ var clientConfig = {
       {
         test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
         exclude: /\/favicon.ico$/,
-        loader: 'file',
+        loader: "file",
         query: {
-          name: 'static/media/[name].[hash:8].[ext]'
+          name: "static/media/[name].[hash:8].[ext]"
         }
       },
       // A special case for favicon.ico to place it into build root directory.
       {
         test: /\/favicon.ico$/,
         include: [paths.appSrc],
-        loader: 'file',
+        loader: "file",
         query: {
-          name: 'static/media/favicon.ico?[hash:8]'
+          name: "static/media/favicon.ico?[hash:8]"
         }
       },
       // "url" loader works just like "file" loader but it also embeds
       // assets smaller than specified size as data URLs to avoid requests.
       {
         test: /\.(mp4|webm|wav|mp3|m4a|aac|oga)(\?.*)?$/,
-        loader: 'url',
+        loader: "url",
         query: {
           limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]'
+          name: "static/media/[name].[hash:8].[ext]"
         }
       },
       // "html" loader is used to process template page (index.html) to resolve
       // resources linked with <link href="./relative/path"> HTML tags.
       {
         test: /\.html$/,
-        loader: 'html',
+        loader: "html",
         query: {
-          attrs: ['link:href'],
+          attrs: ["link:href"]
         }
       }
     ]
   },
   // Point ESLint to our predefined config.
   eslint: {
-    configFile: path.join(__dirname, 'eslint.js'),
+    configFile: path.join(__dirname, "eslint.js"),
     useEslintrc: false
   },
   postcss: function() {
-    return [
-      require('postcss-import'),
-      require('postcss-cssnext')
-    ];
+    return [require("postcss-import"), require("postcss-cssnext")];
   },
   plugins: [
     // Makes some environment variables available to the JS code, for example:
@@ -187,15 +184,15 @@ var clientConfig = {
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
+    fs: "empty",
+    net: "empty",
+    tls: "empty"
   }
 };
 
 var serverConfig = {
   entry: {
-    main: [ paths.appServerIndexJs],
+    main: [paths.appServerIndexJs]
   },
   target: "node",
   output: {
@@ -203,7 +200,7 @@ var serverConfig = {
     libraryTarget: "commonjs2",
     path: paths.appBuild,
     filename: "[name].js",
-    chunkFilename: "[name].js",
+    chunkFilename: "[name].js"
   },
   resolve: clientConfig.resolve,
   // externals: externals,
@@ -212,6 +209,7 @@ var serverConfig = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `env.js`.
     new webpack.DefinePlugin(env),
+    // new webpack.HotModuleReplacementPlugin(),
     /*
     new webpack.DefinePlugin({
       "typeof window": JSON.stringify(undefined),
@@ -220,11 +218,11 @@ var serverConfig = {
     // stats
     function() {
       this.plugin("done", notifyStats);
-    },
+    }
   ]
 };
 
 module.exports = {
   client: clientConfig,
   server: serverConfig
-}
+};
