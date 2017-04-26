@@ -9,8 +9,8 @@ const { setMessages } = require("../common/utils/MessageUtil");
 
 require("../styles");
 
-const AppMain = require("./containers/AppMain");
-const reducers = require("./reducers");
+const AppMain = require("../containers/AppMain");
+const reducers = require("../reducers");
 const logger = loggerMiddleware({ logger: console });
 
 const initialState = {};
