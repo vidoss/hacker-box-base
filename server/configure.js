@@ -39,6 +39,7 @@ function watchServerFilesChange() {
 
 module.exports = server =>
   setupMiddleware(server).then(args => {
+    const isProduction = process.env.NODE_ENV === "production";
     const csp = config.get("contentSecurityPolicy");
     // Compress all requests
     // Note: Compression inherently won't work with SSEs - see the docs at
@@ -49,7 +50,8 @@ module.exports = server =>
     // X-Powered-By, HTTP Strict Transport Security, IE, restrict untrusted
     // HTML, Don't infer the MIME type, Frame Options to prevent clickjacking,
     // XSS Filter.
-    server.use(helmet());
+    const helmetConf = isProduction ? helmet() : helmet({ frameguard: false });
+    server.use(helmetConf);
 
     // Disable client side caching.
     server.use(helmet.noCache());
