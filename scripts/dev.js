@@ -21,8 +21,12 @@ var APP_SERVER_PORT = config.get("server.port");
 
 var compiler;
 var handleCompile;
+var isInteractive = process.stdin.isTTY;
 
 function openBrowser(port, protocol) {
+  if (!isInteractive) {
+    return;
+  }
   if (process.platform === "darwin") {
     try {
       // Try our best to reuse existing tab
@@ -75,6 +79,9 @@ function watchAppServer(protocol) {
 
     checkPortAndRun(APP_SERVER_PORT, function(port) {
       runAppServer(port, function() {
+        console.log(
+          `>>STATUS_READY<< {"devServerUrl": "${protocol}://localhost:${port}/"}\n`
+        );
         openBrowser(port, protocol);
       });
     });
